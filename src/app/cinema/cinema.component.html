@@ -23,8 +23,8 @@
                             <div class="col-md-6">
                             <div class="panel panel-default" >
                                 <div class="panel-heading">{{s.nom}}</div>
-                                <div class="panel-body" >
-                                    <img src="cinemaService.host+'/imageFilm/'+s.projections._embedded.projections[1].film.id">
+                                <div class="panel-body" *ngIf="s.projections" >
+                                    <img src="{{cinemaServise.host+'/imageFilm/'+s.projections._embedded.projections[0].film.id}}"/>
                                 </div>
                             </div>
                         </div>
