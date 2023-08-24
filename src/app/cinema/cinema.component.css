@@ -1,3 +1,7 @@
 .clackable{
     cursor: pointer;
 }
+.ticket{
+    margin: 5px;
+    width: 40PX;
+}

@@ -1,11 +1,10 @@
-
 <div class="container">
     <div class="row">
-        <div class="col-md-4">
-            <ul *ngIf ="villes" class="list-group">
-                <li [ngClass]="v==currentVille?'active':''" *ngFor="let v of villes._embedded.villes" class="list-group-item clackable" 
-                (click)="onGetCinemas(v)">
-                   <a>{{v.nom}}</a> 
+        <div class="col-md-3">
+            <ul *ngIf="villes" class="list-group">
+                <li [ngClass]="v==currentVille?'active':''" *ngFor="let v of villes._embedded.villes"
+                    class="list-group-item clackable" (click)="onGetCinemas(v)">
+                    <a>{{v.nom}}</a>
                 </li>
             </ul>
         </div>
@@ -14,21 +13,42 @@
                 <div class="panel-heading">Listes des Cinémas</div>
                 <div class="panel-body">
                     <ul *ngIf="cinemas" class="nav nav-pills">
-                        <li *ngFor="let c of cinemas._embedded.cinemas" class="clackable">
+                        <li [ngClass]="c==currentCinema?'active':''" *ngFor="let c of cinemas._embedded.cinemas" class="clackable">
                             <a (click)="onGetSalles(c)">{{c.name}}</a>
                         </li>
                     </ul>
                     <div class="row" *ngIf="salles">
                         <div *ngFor="let s of salles._embedded.salles">
                             <div class="col-md-6">
-                            <div class="panel panel-default" >
-                                <div class="panel-heading">{{s.nom}}</div>
-                                <div class="panel-body" *ngIf="s.projections" >
-                                    <img src="{{cinemaServise.host+'/imageFilm/'+s.projections._embedded.projections[0].film.id}}"/>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">{{s.nom}}</div>
+                                    <div class="panel-body" *ngIf="s.projections">
+                                        <div class="row">
+                                            <div class="col-md-7">
+                                                <img width="130" height="180" src="{{cinemaServise.host+'/imageFilm/'+s.projections._embedded.projections[0].film.id}}" />
+                                            </div>
+                                            <div class="col-md-5">
+                                                <ul class="list-group">
+                                                    <li class="list-group-item">Séances :</li>
+                                                    <li [ngClass]="p==currentProjection?'active':''" (click)="onGetTicketsPlaces(p)" *ngFor="let p of s.projections._embedded.projections" class="list-group-item">
+                                                        {{p.seance.heureDebut}}=> Prix  {{p.prix | number : '0.00'}} Dh 
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="currentProjection">
+                                            
+                                            <div class="row" *ngIf="currentProjection.tickets">
+                                               <button class="btn btn-succes ticket" *ngFor="let t of currentProjection.tickets._embedded.tickets">
+                                                {{t.place.numeroPlace}}
+                                                </button>
+                                            </div>
+                                        
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
                     </div>
                 </div>
             </div>
