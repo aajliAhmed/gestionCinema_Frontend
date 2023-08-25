@@ -15,6 +15,7 @@ export class CinemaComponent implements OnInit {
   public currentCinema: any;
   public currentProjection : any;
   public salles: any;
+  public selectedTickets : any;
 
   constructor(public cinemaServise: CinemaService) { }
   
@@ -54,7 +55,45 @@ export class CinemaComponent implements OnInit {
     this.currentProjection=p;
     this.cinemaServise.getTicketsPlaces(p).subscribe(data => {
       this.currentProjection.tickets=data;
+      this.selectedTickets=[];
     }, err => {
+      console.log(err);
+    })
+  }
+  onSelectTicket(t:any){
+    if(!t.selected){
+      t.selected=true;
+      this.selectedTickets.push(t);
+    }
+    else{
+      t.selected=false;
+      this.selectedTickets.splice(this.selectedTickets.indexOf(t),1);
+    }
+    console.log(this.selectedTickets);
+  }
+  getTicketClass(t:any){
+    let str="btn ticket ";
+    if(t.reserve==true){
+      str+="btn-danger";
+    }
+    else if(t.selected){
+      str+="btn-warning"
+    }
+    else{
+      str+="btn-success"
+    }
+    return str;
+  }
+  onPayTickets(dataForm:any){
+    let tickets: any[] =[];
+    this.selectedTickets.forEach((t:any)=>{
+      tickets.push(t.id);
+    });
+    dataForm.tickets=tickets;
+    this.cinemaServise.payertTicket(dataForm).subscribe((dataForm:any) => {
+      alert("Ticket reservee avec succès");
+      this.onGetTicketsPlaces(this.currentProjection);
+    }, (err:any) => {
       console.log(err);
     })
   }
